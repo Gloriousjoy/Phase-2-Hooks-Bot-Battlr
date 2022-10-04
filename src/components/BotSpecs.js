@@ -1,4 +1,6 @@
 import React from "react";
+import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const botTypeClasses = {
   Assault: "icon military",
@@ -9,8 +11,19 @@ const botTypeClasses = {
   Captain: "icon star",
 };
 
-function BotSpecs({ bot }) {
-  return (
+function BotSpecs({allBots, setAllBots }) {
+  const params = useParams();
+  const bot = allBots.filter((robot) => robot.id === parseInt(params.botId));
+  const enlistBot = () => {
+    var pair = { selected: true };
+    const obj = { ...bot[0], ...pair };
+    setAllBots(
+      allBots.map((robot) =>
+        robot.id === parseInt(params.botId) ? obj : robot
+      ) 
+    );
+    };
+        return (
     <div className="ui segment">
       <div className="ui two column centered grid">
         <div className="row">
@@ -51,21 +64,12 @@ function BotSpecs({ bot }) {
               </div>
             </div>
             <button
-              className="ui button fluid"
-              onClick={() =>
-                console.log("connect this to a function that shows all bots")
-              }
-            >
-              Go Back
+              className="ui button fluid">
+              <Link to="/">Back to Bots</Link>
             </button>
             <button
               className="ui button fluid"
-              onClick={() =>
-                console.log(
-                  "connect this to a function that adds this bot to your bot army list"
-                )
-              }
-            >
+              onClick={enlistBot}>
               Enlist
             </button>
           </div>
